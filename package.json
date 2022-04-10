@@ -18,6 +18,7 @@
     "core-js": "^3.8.3",
     "howler": "^2.2.3",
     "plyr": "^3.6.12",
+    "serve": "^13.0.2",
     "vue": "^2.6.14",
     "vue-audio-better": "^3.0.1",
     "vue-plugin-load-script": "^2.1.1",
