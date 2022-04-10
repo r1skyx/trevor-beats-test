@@ -7,8 +7,8 @@
 </span></b-navbar-toggle>
             <b-collapse  id="nav-collapse" is-nav>
                 <b-navbar-nav class="ms-auto">
-                    <b-nav-item class="mx-3"><router-link class="no-style" to="/"><h2 class="text-white">>home</h2></router-link></b-nav-item>
-                    <b-nav-item href="#about" class="mx-3"><router-link class="no-style" to="/#about"><h2 class="text-white">>about</h2></router-link></b-nav-item>
+                    <b-nav-item class="mx-3"><h2 class="text-white"><router-link class="no-style" to="/">>home</router-link></h2></b-nav-item>
+                    <b-nav-item href="#about" class="mx-3"><a href="about"><h2 class="text-white"><router-link class="no-style" to="/">>about</router-link></h2></a></b-nav-item>
                     <b-nav-item href="#store" class="mx-3"><router-link class="no-style" to="/#store"><h2 class="text-white">>store</h2></router-link></b-nav-item>
                     <b-nav-item href="#contact" class="mx-3"><router-link class="no-style" to="/#contact"><h2 class="text-white">>contact me</h2></router-link></b-nav-item>
                     <b-nav-item href="#" class="mx-3 no-list-style"><router-link class="no-style" to="/shopping-cart"><h2 class="text-white"><font-awesome-icon icon="fa-solid fa-cart-shopping" /></h2></router-link></b-nav-item>

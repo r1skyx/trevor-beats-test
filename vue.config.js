@@ -5,6 +5,12 @@ module.exports = defineConfig({
 
 module.exports = {
   publicPath: process.env.NODE_ENV === 'production'
-  ? '/hello-world/'
-  : '/'
+    ? '/trevor-beats/'
+    : '/'
+}
+
+module.exports = {
+  devServer: {
+    proxy: 'http://localhost:8012',
+  }
 }

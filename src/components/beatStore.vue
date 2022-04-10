@@ -26,7 +26,7 @@
             </b-col>
             <b-col></b-col>
         </b-row>
-        <b-row v-for="(beat,i) in beats" :key="i">
+        <b-row v-for="(beat,i) in beats" v-show="beat.show" :key="i">
             <b-col class="beat-flex" cols="11">
                 <h2>{{beat.name}}</h2>
                 <h2>bpm:{{beat.bpm}}</h2>

@@ -45,6 +45,17 @@ export default {
         removeFromCart(beat){
             this.$store.commit('removeFromCart',beat)
         },
+        onPlay(beat){
+            if(beat.audio.paused){
+                beat.audio.play()
+                beat.isPlaying=true;
+            }
+            else if (!beat.audio.paused){
+                beat.audio.pause();
+                beat.audio.currentTime=0;
+                beat.isPlaying=false;
+            }
+        },
     },
     components: {
         trevorNavbar

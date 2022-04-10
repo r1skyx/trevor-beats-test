@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1 class="text-white text-left">>contact me</h1>
-        <form action="" id="contact">
+        <form action="http://localhost:8012/trevor-beats/contact-form.php" method="post" id="contact">
             <h5>{{nameAlert}}</h5>
             <h5>{{emailAlert}}</h5>
             <h5>{{msgAlert}}</h5>
@@ -10,11 +10,14 @@
             <input type="email" name="email" placeholder="email..." v-model="email" id="">
             <textarea form="contact" type="text" name="message" placeholder="message..." v-model="message" id="msg"></textarea>
         </form>
-        <button type="submit" @click="submitForm">/submit/</button>
+        <button type="submit" form="contact" name="submit" @click="submitForm">/submit/</button>
     </div>
 </template>
 
 <script>
+import axios from 'axios';
+
+
 export default {
     name:'contact-form',
     data(){
@@ -33,6 +36,7 @@ export default {
             if(this.name.length<3){
                 this.nameAlert="*name should be longer than 3 characters"
                 this.successAlert=""
+                return false;
             }
             else if (this.name.length>=3){
                 this.nameAlert=""
@@ -43,23 +47,39 @@ export default {
             else {
                 this.successAlert=""
                 this.emailAlert="*invalid email"
+                return false;
             }
             if(this.message.length>300){
                 this.successAlert=""
                 this.msgAlert="message should be under 300 characters"
+                return false;
             }
             else if(this.message.length<10){
                 this.successAlert=""
                 this.msgAlert="*message should be longer than 10 characters"
+                return false;
             }
             else {
                 this.msgAlert=""
             }
             if(this.nameAlert=='' && this.emailAlert=='' && this.msgAlert==''){
+                axios.post ('http://localhost:8012/trevor-beats/contact-form.php',
+                    {
+                    name:this.name,
+                    email:this.email,
+                    message:this.message
+                    }
+
+                )
+                .then(response=> {console.log(response);
                 this.name='';
                 this.email='';
                 this.message='';
-                this.successAlert="message sent!"
+                this.successAlert="message sent!";
+                })
+                .catch(
+                    error=> console.log(error)
+                    )
             }
         }
     }
