@@ -10,9 +10,8 @@
             <b-col md="2" class="margin-10">
                 <select name="genre" v-model="genre" @change="genreFilter" id="">
                     <option value="" disabled selected>genre</option>
-                    <option value="any">any</option>
-                    <option value="html">html</option>
-                    <option value="css">css</option>
+                    <option value="0">any</option>
+                    <option v-for="(genre,i) in genres" :key="i" :value="genre.id">{{genre.name}}</option>
                 </select>
             </b-col>
             <b-col md="2">
@@ -26,11 +25,11 @@
             </b-col>
             <b-col></b-col>
         </b-row>
-        <b-row v-for="(beat,i) in beats" v-show="beat.show" :key="i">
+        <b-row v-for="(beat,i) in beats"  :key="i">
             <b-col class="beat-flex" cols="11">
                 <h2>{{beat.name}}</h2>
                 <h2>bpm:{{beat.bpm}}</h2>
-                <h2>genre:{{beat.genre}}</h2>
+                <h2>genre:{{(genres[beat.genre_id-1]).name}}</h2>
                 <button @click="onPlay(beat)" ><font-awesome-icon class="big-icon" v-if="!beat.isPlaying" icon="fa-solid fa-play" /><font-awesome-icon class="big-icon" v-if="beat.isPlaying" icon="fa-solid fa-pause" /></button>
                 <h2>{{beat.price}}$</h2>
                 <button @click="addToCart(beat)" ><font-awesome-icon  class="big-icon" icon="fa-solid fa-cart-plus" /></button>
@@ -53,48 +52,19 @@ export default {
         return {
             id:[],
             inputSearch:'',
-            genre: '',
+            genre: 0,
             bpm:'',
-            pricing:'',
-            width:Number(window.innerWidth)*0.78,
-            /* beats: [
-                {   
-                    id:0,
-                    name:'bootstrap',
-                    bpm:80,
-                    genre:'css',
-                    playing:false,
-                    price:30,
-                    show:true,
-                    source:'music.mp3',
-                },
-                {
-                    id:1,
-                    name:'tailwind',
-                    bpm:90,
-                    genre:'css',
-                    playing:false,
-                    price:20,
-                    show:true,
-                    source:'music.mp3',
-                },
-                {
-                    id:2,
-                    name:'markuplang',
-                    bpm:100,
-                    genre:'html',
-                    playing:false,
-                    price:40,
-                    show:true,
-                    source:'music.mp3',
-                }
-            ] */
         }
     },
     computed: {
         beats(){
             return this.$store.state.beats;
         },
+
+        genres(){
+            return this.$store.state.genres;
+        },
+
         itemsInCart(){
             return this.$store.state.itemsInCart;
         }
@@ -113,42 +83,23 @@ export default {
         },
         
         search(){
-            this.$nextTick(()=>{
                 let input=this.inputSearch;
-                for(let beat of this.beats){
-                    if(input.length>0){
-                        let name=beat.name;
-                        if (name.includes(input)){
-                            beat.show = true;
-                        }
-                        else {
-                            beat.show=false;
-                        }
-                    }
-                    if(input==''){
-                        beat.show=true;
-                    }
+                if(input.length>0){
+                    this.$store.dispatch('searchBeats', input);
                 }
-                
-            }
-
-            )
+                else if(input=='') {
+                    this.$store.dispatch('fetchBeats');
+                }   
         },
         addToCart(beat){
             this.$store.commit('addToCart',beat)
         },
         genreFilter(){
-            for(let beat of this.beats){
-                if (beat.genre==this.genre){
-                    beat.show=true;
-                }
-                else if (this.genre=='any'){
-                    beat.show=true;
-                }
-                else {
-                    beat.show=false;
-                }
+            let genre = this.genre;
+            if(genre==0){
+                this.$store.dispatch('fetchBeats');
             }
+            this.$store.dispatch('filterGenre', genre)
         },
         bpmFilter(){
             for(let beat of this.beats){
@@ -164,6 +115,10 @@ export default {
             }
         },
         
+    },
+    beforeCreate() {
+        this.$store.dispatch('fetchBeats');
+        this.$store.dispatch('fetchGenres');
     },
     
 }
@@ -182,6 +137,9 @@ export default {
     .border-1 {
         border: 10px solid green !important;
         min-height:80vh;
+        max-height: 80vh;
+        overflow-x:hidden;
+        overflow-y: scroll;
     }
 
     input{
@@ -238,4 +196,18 @@ button {
         justify-content: space-around;
         border:5px solid green;
     }
+
+.border-1::-webkit-scrollbar {
+    width: 12px;               /* width of the entire scrollbar */
+  }
+  
+.border-1::-webkit-scrollbar-track {
+    background: black;        /* color of the tracking area */
+  }
+  
+.border-1::-webkit-scrollbar-thumb {
+    background-color: green;    /* color of the scroll thumb */
+    border-radius: 20px;       /* roundness of the scroll thumb */
+    border: 3px solid black;  /* creates padding around scroll thumb */
+  }
 </style>
